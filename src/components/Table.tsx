@@ -4,6 +4,7 @@ import { DeleteIcon, EditIcon } from "./Icons"
 
 interface TableProps {
   clients: Client[]
+  disactive: ()=> void
 }
 
 export default function Table(props: TableProps) {
@@ -11,7 +12,9 @@ export default function Table(props: TableProps) {
   if (!props.clients.length) {
     return (
       <div className="flex flex-col">
-        <span className="text-xl font-semibold mb-6">Vix, Nada aqui por enquanto!</span>
+        <span className="text-xl font-semibold mb-6 text-white">Vix, nada aqui por enquanto!</span>
+        <Button action={props.disactive} color="blue"
+        >Novo Cliente</Button>
       </div>
     )
   }
@@ -56,7 +59,10 @@ export default function Table(props: TableProps) {
   }
   
   return (
-    <div className="flex justify-center w-full">
+    <div>
+      <div className="mb-6 flex justify-end">
+        <Button action={props.disactive} color="blue" >Novo Cliente</Button>
+      </div>
       <table 
         className={`
         text-gray-950 p-2 rounded-b-md shadow-gray-800 
