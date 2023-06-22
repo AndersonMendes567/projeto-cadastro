@@ -6,14 +6,17 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   safelist: [
-    { pattern: /bg-(gray|red|green|blue)-(600)/ }
+    { 
+      pattern: /bg-(gray|red|green|blue)-(500|600)/,
+      variants: ['hover']
+    },
   ],
   theme: {
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
     },
   },

@@ -4,7 +4,7 @@ export default class Client {
   #address: string
   #district: string
   #city: string
-  #phone: number
+  #phone: string
   #isPlus: boolean
 
   constructor (
@@ -12,7 +12,7 @@ export default class Client {
     address: string, 
     district: string, 
     city: string, 
-    phone: number, 
+    phone: string, 
     isPlus: boolean,
     id: number = 0
   ) {
@@ -23,6 +23,10 @@ export default class Client {
     this.#city = city;
     this.#phone = phone;
     this.#isPlus = isPlus;
+  }
+
+  static empty() {
+    return new Client('', '', '', '', '', false);
   }
 
   get id() {

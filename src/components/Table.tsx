@@ -4,16 +4,22 @@ import { DeleteIcon, EditIcon } from "./Icons"
 
 interface TableProps {
   clients: Client[]
+  setClient: (client: Client)=> void
   disactive: ()=> void
 }
 
 export default function Table(props: TableProps) {
 
+  function newClient() {
+    props.setClient(Client.empty())
+    props.disactive();
+  }
+
   if (!props.clients.length) {
     return (
       <div className="flex flex-col">
         <span className="text-xl font-semibold mb-6 text-white">Vix, nada aqui por enquanto!</span>
-        <Button action={props.disactive} color="blue"
+        <Button action={newClient} color="blue"
         >Novo Cliente</Button>
       </div>
     )
@@ -46,7 +52,12 @@ export default function Table(props: TableProps) {
           <td className="px-4 py-2">{client.phone}</td>
           <td className="px-4 py-2 bg-clip-padd">{client.isPlus ? "Sim" : "Não"}</td>
           <td className="px-4 py-2 bg-clip-padd flex gap-2">
-            <button className="text-blue-600 p-1">
+            <button className="text-blue-600 p-1"
+              onClick={()=> {
+                props.setClient(client);
+                props.disactive()
+              }}
+            >
               <EditIcon />
             </button>
             <button className="text-red-600 p-1">
@@ -61,7 +72,7 @@ export default function Table(props: TableProps) {
   return (
     <div>
       <div className="mb-6 flex justify-end">
-        <Button action={props.disactive} color="blue" >Novo Cliente</Button>
+        <Button action={newClient} color="blue" >Novo Cliente</Button>
       </div>
       <table 
         className={`
