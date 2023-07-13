@@ -5,30 +5,49 @@ import bgRegister from "../assets/register.png"
 import Table from "@/components/Table";
 import { clients } from "../data/clients"
 import Form from "@/components/Form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Client from "@/core/Client";
+import { ClientRepository } from "@/core/ClientRepository";
+import ClientCollection from "@/backend/db/ClientCollection";
 
 export default function Home() {
-  const [showRegister, setShowRegister] = useState(false);
-  const [client, setClient] = useState<Client>(Client.empty())
+  const repo: ClientRepository = new ClientCollection();
 
-  const disactive = ()=> setShowRegister((curr) => !curr);
+  const [view, setView] = useState<'list' | 'register'>('list');
+  const [client, setClient] = useState<Client>(Client.empty());
+  const [clients, setClients] = useState<Client[]>([]);
 
-  function handleSubmit(client: Client) {
-    console.log(client)
+  async function handleSubmit(client: Client) {
+    await repo.save(client);
+    getClients();
+    setView('list');
   }
+
+  function getClients() {
+    repo.getAll().then(clients => {
+      setClients(clients);
+    })
+  }
+
+  async function deleteClient(client: Client) {
+    await repo.delete(client).then(()=> console.log('Cliente excluido'));
+    getClients();
+  }
+
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   useEffect(getClients, [])
 
   return (
     <div className={`
     flex justify-around items-center bg-gradient-to-br from-blue-800 to-purple-800 h-screen
     `}>
-      <Layout title={ showRegister ? "Cadastrar Cliente" : "Clientes"}>
+      <Layout title={ view === 'register' ? 'Cadastrar Cliente' : 'Clientes'}>
         <Image src={bgRegister} alt='' width={300} height={300} />
       </Layout>
-      { showRegister ?
-        <Form client={client} disactive={disactive} handleSubmit={handleSubmit} /> 
+      { view === 'register' ?
+        <Form client={client} setView={setView} handleSubmit={handleSubmit} /> 
         : 
-        <Table clients={clients} setClient={setClient} disactive={disactive} />
+        <Table clients={clients} setClient={setClient} setView={setView} deleteClient={deleteClient} />
       }
     </div>
   )

@@ -1,5 +1,5 @@
 export default class Client {
-  #id: number
+  #id: string
   #name: string
   #address: string
   #district: string
@@ -14,7 +14,7 @@ export default class Client {
     city: string, 
     phone: string, 
     isPlus: boolean,
-    id: number = 0
+    id: string = ''
   ) {
     this.#id = id;
     this.#name = name;
@@ -55,5 +55,26 @@ export default class Client {
 
   get isPlus() {
     return this.#isPlus;
+  }
+
+  updateProperties(newProperties: any) {
+    if (newProperties.hasOwnProperty('name')) {
+      this.#name = newProperties.name;
+    }
+    if (newProperties.hasOwnProperty('address')) {
+      this.#address = newProperties.address;
+    }
+    if (newProperties.hasOwnProperty('district')) {
+      this.#district = newProperties.district;
+    }
+    if (newProperties.hasOwnProperty('city')) {
+      this.#city = newProperties.city;
+    }
+    if (newProperties.hasOwnProperty('phone')) {
+      this.#phone = newProperties.phone;
+    }
+    if (newProperties.hasOwnProperty('isPlus')) {
+      this.#isPlus = newProperties.isPlus;
+    }
   }
 }
