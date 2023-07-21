@@ -11,7 +11,7 @@ export default function Button(props: ButtonProps) {
   return (
     <button 
       className={`
-        px-8 py-2 bg-${color}-600 hover:bg-${color}-500 font-bold rounded-lg text-white
+        px-6 py-1 bg-${color}-600 hover:bg-${color}-500 font-semibold rounded-lg text-white shadow-sm
       `}
       type={type}
       onClick={props.action}

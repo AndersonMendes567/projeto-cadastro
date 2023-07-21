@@ -1,74 +1,25 @@
 import Client from "@/core/Client"
-import { FormEvent, useState } from "react"
+import useForm from "@/hooks/useForm"
 import Button from "./Button"
 import Input from "./Input"
+import maskPhone from "@/utils/maskPhone"
 
 interface FormProps {
   client: Client
-  setView: (view: 'list' | 'register')=> void
-  handleSubmit: (client: Client) => void
-}
-
-interface ClientProps {
-  name: string
-  address: string
-  district: string
-  city: string
-  phone: string
-  isPlus: boolean
-  id: number
+  changeList: ()=> void
+  onSubmit: (client: Client) => void
 }
 
 export default function Form(props: FormProps) {
-  const [client, setClient] = useState<Client>(props.client);
-
-  function handleChange(name: string, value: any) {
-    const newClient = new Client(
-      client.name, 
-      client.address, 
-      client.district, 
-      client.city, 
-      client.phone, 
-      client.isPlus,
-      client.id
-    );
-
-    newClient.updateProperties({[name]: value});
-    setClient(newClient);
-  }
-
-  function onSubmit(event: FormEvent) {
-    event.preventDefault();
-    props.handleSubmit(
-      new Client(
-        client.name, 
-        client.address, 
-        client.district, 
-        client.city, 
-        client.phone, 
-        client.isPlus, 
-        client.id
-      )
-    )
-  }
-
-  function maskPhone(value: string) {
-    var r = value.replace(/\D/g, "");
-    r = r.replace(/^0/, "");
-    if (r.length > 10) {
-      r = r.replace(/^(\d\d)(\d{5})(\d{4}).*/, "($1) $2-$3");
-    } else if (r.length > 5) {
-      r = r.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, "($1) $2-$3");
-    } else if (r.length > 2) {
-      r = r.replace(/^(\d\d)(\d{0,5})/, "($1) $2");
-    } else {
-      r = r.replace(/^(\d*)/, "($1");
-    }
-    return r;
-  }
   
+  function midleSubmit(client: Client) {
+    props.changeList();
+    props.onSubmit(client);
+  }
+  const { client, handleChange, handleSubmit } = useForm(props.client, midleSubmit);
+
   return (
-    <form onSubmit={onSubmit} className="bg-white text-black p-8 rounded-md w-2/5 shadow-gray-800 shadow-md">
+    <form onSubmit={handleSubmit} className="bg-white text-black p-8 rounded-md w-2/5 shadow-gray-800 shadow-md">
       <h2 className="text-xl font-semibold mb-3">Insira as informações do cliente</h2>
       <hr />
       <div className="grid grid-cols-2 gap-4 my-6">
@@ -104,12 +55,12 @@ export default function Form(props: FormProps) {
                 handleChange('isPlus', e.target.value !== 'on')
               }}
             />
-            Plus (Todos o serviços)
+            Plus (Todos os serviços)
           </label>
         </div>
       </div>
       <div className="flex justify-end gap-4">
-        <Button color="red" action={()=> props.setView("list")} >
+        <Button color="red" action={()=> props.changeList()} >
           Cancelar
         </Button>
         <Button 

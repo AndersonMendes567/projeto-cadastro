@@ -5,7 +5,7 @@ import { DeleteIcon, EditIcon } from "./Icons"
 interface TableProps {
   clients: Client[]
   setClient: (client: Client)=> void
-  setView: (view: 'list' | 'register')=> void
+  changeRegister: ()=> void
   deleteClient: (client: Client)=> void
 }
 
@@ -13,7 +13,7 @@ export default function Table(props: TableProps) {
 
   function newClient() {
     props.setClient(Client.empty())
-    props.setView('register');
+    props.changeRegister();
   }
 
   if (!props.clients.length) {
@@ -56,7 +56,7 @@ export default function Table(props: TableProps) {
             <button className="text-blue-600 p-1"
               onClick={()=> {
                 props.setClient(client);
-                props.setView('register');
+                props.changeRegister();
               }}
             >
               <EditIcon />
@@ -64,7 +64,6 @@ export default function Table(props: TableProps) {
             <button className="text-red-600 p-1"
               onClick={()=> {
                 props.deleteClient(client);
-                props.setView('list')
               }}
             >
               <DeleteIcon />
